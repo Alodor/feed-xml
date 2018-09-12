@@ -1,5 +1,4 @@
 <?php include 'feed.php' ?>
-
 <!Doctype html>
 <html lang="es">
     <head>
@@ -9,45 +8,40 @@
     </head>
     
     <body>
-       <?php 
-            // Captura de items
-$items = $xml->channel->item;
+        <?php 
+        // Captura de items
+        $items = $xml->channel->item;
 
+        // Recorrer los item del archivo
+        $count = 0;
 
+        foreach ($items as $item) {  
+            
+            // Detener el recorrido en el cuarto item
+            if ($count === 4) break;
+    
+            $description = $item->description;
+            $image = extraerSRC($description);
+            $paragraph = explode('<p>', $description);
 
-$count = 0;
+            // Mostrar Items
+            $data = "";
+            $data .= "
+            <div class='card'>
+                <div class='card-header'>
+                    <a href='".$item->link."'>
+                        <img src='".$image."'>
+                    </a>
+                </div>
+                <div class='card-body'>
+                    <h3 class='card-title'>".$item->title."</h3>
+                    <p>".$paragraph[1]."</p>
+                </div>
+            </div>
+            ";
 
-foreach ($items as $item) {  
-    
-    if ($count === 1)
-        break;
-    
-    $description = $item->description;
-    
-    echo extraerSRC($description);
-    
-    $explode = explode("<p>", $description);
-    echo '<br><br>';
-    echo $explode[1];
-    
-    //echo $description;
-    
-    /*
-    $data = "";
-    $data .= "
-    <script>
-        const image = document
-    </script>
-    ";
-    */
-    
-    //echo $item->title;
-    
-    //echo $item->link;
-    //echo $item->description;
-    //echo '<br>';
-    $count++;
-}
-        ?>        
+            echo $data;
+            $count++;
+        } ?>        
     </body>
 </html>
